@@ -9,6 +9,7 @@ const About = ({location, match}) => {
     return (
         <div>
             <h2>About {match.params.name}</h2>
+            {/* ?detail=true 로 들어올때만 출력된다*/}
             {detail && 'detail: http://localhost:3000/about?detail=true'}
         </div>
     );

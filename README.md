@@ -1,22 +1,51 @@
 # React SSR
++ React Router
+
+
+Install
+```
+$ npm install
+$ yarn install
+```
 
 Start
+```
+$ npm run start
+$ yarn start
+```
+
+Build
+```
+$ npm run build
+$ yarn build
+```
+
+
+
+## 1. React Router
 
 ```
-$ npm install -g yarn
-$ npx create-react-app .
 $ yarn add react-router-dom
-$ yarn add cross-env --dev
-```
-
-
-## React Router
-
-```
 $ yarn add query-string
 ```
 
 > Sample-Code
+
++ src/client/Root.js
+
+```js
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import App from '../shared/App';
+
+const Root = () => (
+    <BrowserRouter>
+        <App/>
+    </BrowserRouter>
+);
+
+export default Root;
+```
 
 + src/shared/App.js
 
@@ -29,9 +58,12 @@ class App extends Component {
     render() {
         return (
             <div>
+                <MenuBar/>
+                {/* exact - 주어진 경로와 정확히 맞아 떨어져야만 설정한 컴포넌트를 보여준다*/}
                 <Route exact path="/" component={Home}/>
 
                 {/*
+                    Switch 가 없으면 /about:name 요청시 /about 과 /about:name 이 중첩되어 요청된다
                     먼저 비교 할 라우트를 위에 작성하셔야 한다
                     만약에 /about 을 /about/:name 보다 위에 넣어준다면, name 을 입력해주어도 나타나지 않는다..
                 */}
@@ -61,11 +93,41 @@ const About = ({location, match}) => {
     return (
         <div>
             <h2>About {match.params.name}</h2>
+            {/* ?detail=true 로 들어올때만 출력된다*/}
             {detail && 'detail: http://localhost:3000/about?detail=true'}
         </div>
     );
 };
 
 export default About;
+```
+
++ src/components/Menubar.js
+
+```js
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+
+const MenuBar = () => {
+    const activeStyle = {
+        color: 'blue',
+        fontSize: '2rem'
+    };
+
+    // NavLink 는 Link 와 다르게 설정한 URL 이 활성화가 되면, 
+    // 특정 스타일 혹은 클래스를 지정 할 수 있다.
+    return (
+        <div>
+            <ul>
+                <li><NavLink exact to="/" activeStyle={activeStyle}>Home</NavLink></li>
+                <li><NavLink exact to="/about" activeStyle={activeStyle}>About</NavLink></li>
+                <li><NavLink to="/about/foo" activeStyle={activeStyle}>About Foo</NavLink></li>
+            </ul>
+            <hr/>
+        </div>
+    );
+};
+
+export default MenuBar;
 ```
 
