@@ -1,5 +1,5 @@
 # React SSR
-+ React Router
++ [1. React Router](#1-react-router)
 
 
 Install
@@ -31,7 +31,7 @@ $ yarn add query-string
 
 > Sample-Code
 
-+ src/client/Root.js
++ **src/client/Root.js**
 
 ```js
 import React from 'react';
@@ -47,7 +47,7 @@ const Root = () => (
 export default Root;
 ```
 
-+ src/shared/App.js
++ **src/shared/App.js**
 
 ```js
 import React, { Component } from 'react';
@@ -71,6 +71,7 @@ class App extends Component {
                     <Route path="/about/:name" component={About}/>
                     <Route path="/about" component={About}/>
                 </Switch>
+                <Route path="/posts" component={Posts}/>
             </div>
         );
     }
@@ -79,7 +80,7 @@ class App extends Component {
 export default App;
 ```
 
-+ src/pages/About.js
++ **src/pages/About.js**
 
 ```js
 import React from 'react';
@@ -102,7 +103,7 @@ const About = ({location, match}) => {
 export default About;
 ```
 
-+ src/components/Menubar.js
++ **src/components/Menubar.js**
 
 ```js
 import React from 'react';
@@ -131,3 +132,60 @@ const MenuBar = () => {
 export default MenuBar;
 ```
 
++ **src/components/Posts.js**
+
+```js
+import React from 'react';
+import { Link, Route } from 'react-router-dom';
+import Post  from './Post';
+
+const Posts = ({match}) => {
+    const ulStyle = {fontSize : '22px'}
+
+    return (
+        <div>
+            <h2>Post List</h2>
+            <ul style={ulStyle}>
+                <li><Link to={`${match.url}/1`}>Post #1</Link></li>
+                <li><Link to={`${match.url}/2`}>Post #2</Link></li>
+                <li><Link to={`${match.url}/3`}>Post #3</Link></li>
+                <li><Link to={`${match.url}/4`}>Post #4</Link></li>
+            </ul>
+            <Route exact path={match.url} render={()=>(<h3>Please select any post</h3>)}/>
+            <Route path={`${match.url}/:id`} component={Post}/>
+        </div>
+    );
+};
+
+export default Posts;
+```
+
++ **src/components/Post.js**
+
+```js
+import React from 'react';
+
+const Post = ({match, location}) => {
+    const iStyle = {fontSize : '22px'}
+    const labelStyle ={color : 'green'}
+
+    return (
+        <div style={iStyle}>
+            <hr/>
+            {/* 
+                match.params.id   : 3
+                location.pathname : /posts/4
+                match.path        : /posts/:id
+                match.url         : /posts/4
+            */}
+            <p><label style={labelStyle}>match.params.id : </label>{match.params.id}</p>
+            <p><label style={labelStyle}>location.pathname : </label>{location.pathname}</p>
+            <p><label style={labelStyle}>match.path : </label>{match.path}</p>
+            <p><label style={labelStyle}>match.url : </label>{match.url}</p>
+        </div>
+
+    );
+};
+
+export default Post;
+```
